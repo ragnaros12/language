@@ -8,45 +8,51 @@ import lib.Values.StringValue;
 import lib.Values.Value;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 public class Variables {
-    private static int StackSize = 0 ;
-    public static ArrayList<Variable> Variables;
+
+    private static final ArrayList<Variable> global;
+    private static final Stack<ArrayList<Variable>> allVars;
 
     public static void AddStack(){
-        StackSize++;
-    }
-    public static int GetStack(){
-        return StackSize;
+        allVars.push(new ArrayList<>());
     }
     public static void RemoveTopLevel(){
-        Variables.removeIf(variable -> variable.getStackPos() == GetStack());
-        StackSize = GetStack() - 1;
+        allVars.pop();
     }
 
     static  {
-        Variables = new ArrayList<>();
+        global = new ArrayList<>();
+        allVars = new Stack<>();
     }
 
     public static boolean isExists(String key){
-        return Variables.stream().filter(o -> o.getName().equals(key)).findFirst().orElse(null) != null;
+        return
+                allVars.peek().stream().filter(o -> o.getName().equals(key)).findFirst().orElse(null) != null ||
+                global.stream().filter(o -> o.getName().equals(key)).findFirst().orElse(null) != null;
     }
-
 
     public static Value get(String key){
         if(!isExists(key))
             return null;
-        return Variables.stream().filter(o -> o.getName().equals(key)).findFirst().orElseThrow().getValue();
+        return global.stream().filter(o -> o.getName().equals(key)).findFirst().orElse(
+                allVars.peek().stream().filter(o -> o.getName().equals(key)).findFirst().orElseThrow()
+        ).getValue();
     }
     public static void add(String key, Value value){
         if(isExists(key))
             throw new VariableAlreadyDefinedException();
-        Variables.add(new Variable(key, value, value.getType(), StackSize));
+        ArrayList<Variable> variables = allVars.size() == 0 ? global : allVars.peek();
+        variables.add(new Variable(key, value, value.getType()));
     }
     public static void put(String key, Value value){
         if(!isExists(key))
             throw new VariableNotDefinedException();
-        Variable res = Variables.stream().filter(o -> o.getName().equals(key)).findFirst().orElseThrow();
+        Variable res = global.stream().filter(o -> o.getName().equals(key)).findFirst().orElse(
+                allVars.peek().stream().filter(o -> o.getName().equals(key)).findFirst().orElseThrow()
+        );
         if(res.getType() != value.getType() && res.getType() != Types.STRING)
             throw new TypeException();
         else if(res.getType() != value.getType() && res.getType() == Types.STRING)

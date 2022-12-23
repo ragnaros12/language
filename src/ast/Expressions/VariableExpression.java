@@ -18,6 +18,6 @@ public class VariableExpression implements Expression {
         if(var != null) {
             return var;
         }
-        throw new RuntimeException("переменной не существует");
+        throw new RuntimeException("переменной не существует: " + name);
     }
 }

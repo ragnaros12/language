@@ -7,11 +7,15 @@ import java.util.ArrayList;
 
 public class BlockStatement implements Statement {
     public ArrayList<Statement> statements;
-    private final boolean IsNewStack;
+    private boolean IsNewStack;
 
     public BlockStatement(boolean IsNewStack) {
         statements = new ArrayList<>();
         this.IsNewStack = IsNewStack;
+    }
+
+    public void setNewStack(boolean newStack) {
+        IsNewStack = newStack;
     }
 
     public void add(Statement statement){

@@ -6,13 +6,11 @@ public class Variable {
     private final String name;
     private Value value;
     private final int type;
-    private final int StackPos;
 
-    public Variable(String name, Value value, int type, int stackPos) {
+    public Variable(String name, Value value, int type) {
         this.name = name;
         this.value = value;
         this.type = type;
-        StackPos = stackPos;
     }
 
     public String getName() {
@@ -31,7 +29,8 @@ public class Variable {
         return type;
     }
 
-    public int getStackPos() {
-        return StackPos;
+    @Override
+    public String toString() {
+        return name + " " + type + " " + value.asString();
     }
 }

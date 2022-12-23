@@ -1,6 +1,5 @@
 package ast.Expressions;
 
-import ast.Expressions.Expression;
 import lib.*;
 import lib.Values.DoubleValue;
 import lib.Values.IntValue;
@@ -25,6 +24,7 @@ public class BinaryExpression implements Expression {
 
         int type1 = expr1v.getType();
         int type2 = expr2v.getType();
+
 
         if(type1 == Types.INTEGER && type2 == Types.INTEGER) {
             switch (operation) {
@@ -89,7 +89,7 @@ public class BinaryExpression implements Expression {
                         buffer.append(expr1v.asString());
                     return new StringValue(buffer.toString());
                 case '+':
-                    return new StringValue( expr2v.asString()  + expr1v.asDouble());
+                    return new StringValue(expr1v.asString()  + expr2v.asString());
             }
         }
         else if((type1 == Types.STRING)
@@ -101,7 +101,7 @@ public class BinaryExpression implements Expression {
                         buffer.append(expr1v.asString());
                     return new StringValue(buffer.toString());
                 case '+':
-                    return new StringValue(expr1v.asString() + expr2v.asDouble());
+                    return new StringValue(expr1v.asString() + expr2v.asString());
             }
         }
         throw new RuntimeException("неизестный тип");

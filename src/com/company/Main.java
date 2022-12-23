@@ -20,10 +20,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+
+
+
+/*
+
+ */
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        String text = new String(Files.readAllBytes(Path.of("C:\\Users\\artem\\Desktop\\asd.txt")), StandardCharsets.UTF_8);
+        String text = Files.readString(Path.of("C:\\Users\\khlop\\Desktop\\asd.txt"));
         ArrayList<Token> tokens;
         Lexer lexer = new Lexer(text);
         tokens = lexer.Tokenize();

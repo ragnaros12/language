@@ -88,9 +88,9 @@ public class Parser {
             consume(TokenType.L_PAREN);
             Expression expression = expression();
             consume(TokenType.R_PAREN);
-            If = block();
+            If = block(false);
             if(match(TokenType.ELSE))
-                Else = block();
+                Else = block(false);
             return new IfStatement(expression, If, Else);
         }
         if(match(TokenType.RETURN)){
@@ -128,7 +128,7 @@ public class Parser {
             consume(TokenType.SEMI);
             Statement next = BaseOperators();
             consume(TokenType.R_PAREN);
-            Statement block = block();
+            Statement block = block(false);
             ret.add(new ForStatement(init, If, next, block));
             return ret;
         }
@@ -201,7 +201,10 @@ public class Parser {
         return res;
     }
     private Statement block(){
-        BlockStatement statement = new BlockStatement(true);
+        return block(true);
+    }
+    private BlockStatement block(boolean isNewStack){
+        BlockStatement statement = new BlockStatement(isNewStack);
         if(match(TokenType.OPEN_FIGURE)) {
             while (!match(TokenType.CLOSE_FIGURE)) {
                 statement.add(statement());
